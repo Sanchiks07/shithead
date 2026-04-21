@@ -1,18 +1,45 @@
 <x-layout>
     <div id="game">
-        <h1>Shithead</h1>
 
-        <div>
-            <h2>Player Hand</h2>
-            <div id="player-hand"></div>
+        <h1 class="title">Shithead</h1>
+
+        <!-- MODE -->
+        <div class="mode-select">
+            <button data-mode="1">1 vs 1</button>
+            <button data-mode="2">1 vs 2</button>
         </div>
 
-        <div>
-            <h2>Table</h2>
-            <div id="table"></div>
+        <!-- TOP AREA -->
+        <div class="top-row">
+
+            <div id="deck" class="deck"></div>
+
+            <div id="table" class="pile"></div>
+
         </div>
 
-        <button id="draw-card">Draw Card</button>
+        <!-- OPPONENTS -->
+        <div id="opponents" class="opponents"></div>
+
+        <!-- PLAYER ZONE -->
+        <div class="player-zone">
+
+            <div class="section">
+                <h3>Your Hand</h3>
+                <div id="player-hand" class="hand"></div>
+            </div>
+
+            <div class="section">
+                <h3>Face Up</h3>
+                <div id="face-up" class="row"></div>
+            </div>
+
+            <div class="section">
+                <h3>Face Down</h3>
+                <div id="face-down" class="row"></div>
+            </div>
+
+        </div>
     </div>
 
     @vite('resources/js/app.js')

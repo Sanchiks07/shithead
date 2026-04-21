@@ -303,3 +303,121 @@ body::before {
     );
     pointer-events: none;
 }
+
+/* ---------- GAME PAGE ---------- */
+#game {
+    display: grid;
+    grid-template-areas:
+        "deck pile opponents"
+        "faceup pile opponents"
+        "facedown pile opponents"
+        "hand hand hand";
+
+    grid-template-columns: 160px 1fr 1fr;
+    gap: 18px;
+
+    padding: 20px;
+    min-height: 100vh;
+}
+
+/* ===================== */
+/* CARDS */
+/* ===================== */
+.card {
+    width: 70px;
+    border-radius: 6px;
+    transition: 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+}
+
+.card.small {
+    width: 45px;
+}
+
+/* ===================== */
+/* DECK */
+/* ===================== */
+#deck {
+    grid-area: deck;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#deck img {
+    width: 80px;
+}
+
+/* ===================== */
+/* PILE (ONLY TOP CARD) */
+/* ===================== */
+#table {
+    grid-area: pile;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pile-card {
+    width: 90px;
+    border-radius: 6px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+}
+
+/* ===================== */
+/* OPPONENTS */
+/* ===================== */
+#opponents {
+    grid-area: opponents;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.opponent {
+    background: rgba(255,255,255,0.05);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* ===================== */
+/* YOUR ZONES */
+/* ===================== */
+#face-up {
+    grid-area: faceup;
+    display: flex;
+    gap: 6px;
+}
+
+#face-down {
+    grid-area: facedown;
+    display: flex;
+    gap: 6px;
+}
+
+#player-hand {
+    grid-area: hand;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* ===================== */
+/* VISUAL DEPTH (LIGHT 3D FEEL) */
+/* ===================== */
+#face-up img,
+#face-down img {
+    opacity: 0.85;
+    transform: scale(0.95);
+}
+
+/* ===================== */
+/* OPTIONAL POLISH */
+/* ===================== */
+h4 {
+    margin: 5px 0;
+}

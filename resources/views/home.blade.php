@@ -25,6 +25,7 @@
             <ul>
                 <li><strong>6</strong> resets the pile (you can play anything after it)</li>
                 <li><strong>10</strong> burns the pile completely</li>
+                <li><strong>4 of the same card</strong> also burns the pile completely (placed on top of each other not randomly scattered between the pile)</li>
             </ul>
 
             <p class="goal">
