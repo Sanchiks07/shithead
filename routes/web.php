@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\GameController;
 
 Route::get('/', function () {
     return view('home');
@@ -18,3 +19,6 @@ Route::post('/register', [RegisterController::class, 'store']);
 
 // LOGOUT
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+
+// GAME
+Route::get('/game', [GameController::class, 'index'])->name('game')->middleware('auth');

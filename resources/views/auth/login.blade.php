@@ -3,15 +3,6 @@
         <h1>Login</h1>
         <p>Don't have an account? <a href="{{ route('register') }}">Register</a></p>
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-
-            <input type="email" name="email" placeholder="Email" required autofocus><br>
-            <input type="password" name="password" placeholder="Password" required><br>
-
-            <button type="submit">Login</button>
-        </form>
-
         @if ($errors->any())
             <div class="error-messages">
                 @foreach ($errors->all() as $error)
@@ -19,6 +10,15 @@
                 @endforeach
             </div>
         @endif
+
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+
+            <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" autofocus required ><br>
+            <input type="password" name="password" placeholder="Password" value="{{ old('password') }}" required><br>
+
+            <button type="submit">Login</button>
+        </form>
 
         <div class="default-users">
             <h2>Default Users</h2>
