@@ -1,3 +1,9 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .main-container {
     display:flex;
     flex-direction: column;
@@ -5,4 +11,120 @@
     justify-content: center;
     min-height: 100vh;
     min-width: 100vw;
+}
+
+/* ---------- NAVIGATION ---------- */
+navigation {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #333;
+    width: 100vw;
+    height: 60px;
+    padding: 16px 0;
+}
+
+navigation ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+navigation li {
+    color: white;
+    font-size: 16px;
+}
+
+navigation ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+navigation ul li a:hover {
+    text-decoration: underline;
+    color: #ddd;
+}
+
+.logout-form {
+    display: flex;
+    align-items: center;
+}
+
+.logout-form button {
+    cursor: pointer;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    padding: 8px 16px;
+}
+
+.logout-form button:hover {
+    background-color: #0056b3;
+    transition: background-color 0.2s ease;
+}
+
+/* ---------- LOGIN & REGISTER ---------- */
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.auth-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 300px;
+}
+
+.auth-container input {
+    padding: 8px;
+    width: 200px;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.auth-container button {
+    padding: 8px;
+    width: 100%;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 50%;
+}
+
+.auth-container button:hover {
+    background-color: #0056b3;
+    transition: background-color 0.2s ease;
+}
+
+.error-messages {
+    color: red;
+    margin-bottom: 16px;
+}
+
+.default-users {
+    margin-top: 32px;
+    text-align: center;
+    background-color: #f8f9fa;
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.default-users h2 {
+    margin-bottom: 16px;
+}
+
+.default-users hr {
+    margin: 16px 0;
 }

@@ -1,19 +1,7 @@
 <x-layout>
-    <div id="game">
-    <h1>Shithead</h1>
-
-    <div>
-        <h2>Player Hand</h2>
-        <div id="player-hand"></div>
+    <div class="home-container">
+        <h1>Welcome to Shithead Game</h1>
+        <p>Play the classic card game "Shithead" online with friends or against the computer. Challenge your opponents, strategize your moves, and have fun!</p>
+        <a href="{{ route('game') }}" class="play-button">Play Now</a>
     </div>
-
-    <div>
-        <h2>Table</h2>
-        <div id="table"></div>
-    </div>
-
-    <button id="draw-card">Draw Card</button>
-    </div>
-
-    @vite('resources/js/app.js')
 </x-layout>
