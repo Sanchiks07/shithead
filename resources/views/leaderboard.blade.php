@@ -7,9 +7,7 @@
         </h1>
 
         <!-- YOUR PERSONAL RANK -->
-        <div id="my-rank" class="my-rank-box">
-            Loading your rank...
-        </div>
+        <div id="my-rank" class="my-rank-box"></div>
 
         <!-- LEADERBOARD TABLE -->
         <div class="table-wrapper">
@@ -25,7 +23,7 @@
                 </thead>
                 <tbody id="leaderboard-body">
                     <tr>
-                        <td colspan="5">Loading leaderboard...</td>
+                        <td colspan="5"></td>
                     </tr>
                 </tbody>
             </table>
