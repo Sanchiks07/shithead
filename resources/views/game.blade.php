@@ -7,6 +7,7 @@
         <div class="mode-select">
             <button data-mode="1">1 vs 1</button>
             <button data-mode="2">1 vs 2</button>
+            <button id="shuffle-btn">Shuffle / Restart</button>
         </div>
 
         <!-- TOP AREA -->

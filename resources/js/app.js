@@ -1,6 +1,22 @@
 import * as Cards from 'deckofcards';
 
 // =====================
+// GAME STATE
+// =====================
+let deck;
+
+let players = [];
+let currentPlayer = 0;
+
+let tablePile = [];
+let pileValue = 0;
+
+let gameLocked = false;
+
+// 🔥 FIX: store selected mode (IMPORTANT)
+let gameMode = 1;
+
+// =====================
 // CARD IMAGE
 // =====================
 function getCardImage(card, hidden = false) {
@@ -29,19 +45,6 @@ function getCardImage(card, hidden = false) {
 }
 
 // =====================
-// GAME STATE
-// =====================
-let deck;
-
-let players = [];
-let currentPlayer = 0;
-
-let tablePile = [];
-let pileValue = 0;
-
-let gameLocked = false;
-
-// =====================
 // PLAYER
 // =====================
 function createPlayer(isHuman = false) {
@@ -54,9 +57,11 @@ function createPlayer(isHuman = false) {
 }
 
 // =====================
-// START GAME
+// START GAME (FIXED)
 // =====================
 function startGame(mode = 1) {
+    gameMode = mode; // 🔥 store mode
+
     deck = new Cards.Deck();
     deck.shuffle();
 
@@ -118,18 +123,33 @@ function canPlay(card) {
 function applySpecial(card) {
     const v = getValue(card);
 
-    if (v === 6) {
-        pileValue = 0;
-        return;
-    }
-
+    // 10 → burn + play again
     if (v === 10) {
         tablePile = [];
         pileValue = 0;
-        return;
+        return "play_again";
+    }
+
+    // 6 → reset
+    if (v === 6) {
+        pileValue = 0;
+        return "normal";
+    }
+
+    // 4 vienādas
+    if (tablePile.length >= 4) {
+        const last4 = tablePile.slice(-4);
+        const same = last4.every(c => getValue(c) === getValue(last4[0]));
+
+        if (same) {
+            tablePile = [];
+            pileValue = 0;
+            return "play_again";
+        }
     }
 
     pileValue = v;
+    return "normal";
 }
 
 // =====================
@@ -160,7 +180,7 @@ function nextTurn() {
 }
 
 // =====================
-// ACTIVE ZONE SYSTEM (IMPORTANT FIX)
+// ACTIVE ZONE
 // =====================
 function getActiveZone(player) {
     if (player.hand.length > 0) return player.hand;
@@ -178,11 +198,32 @@ function playCard(index) {
     if (!player.isHuman) return;
 
     const source = getActiveZone(player);
-    const card = source[index];
+    let card = source[index];
 
     if (!card) return;
 
-    // INVALID MOVE
+    // FACE DOWN
+    if (source === player.faceDown) {
+        card = source.splice(index, 1)[0];
+        tablePile.push(card);
+
+        if (!canPlay(card)) {
+            pickupPile(player);
+            refill(player);
+            nextTurn();
+        } else {
+            const result = applySpecial(card);
+            refill(player);
+
+            if (result !== "play_again") nextTurn();
+        }
+
+        render();
+        runTurn();
+        return;
+    }
+
+    // INVALID
     if (!canPlay(card)) {
         pickupPile(player);
         refill(player);
@@ -193,14 +234,17 @@ function playCard(index) {
         return;
     }
 
-    // VALID MOVE
+    // VALID
     tablePile.push(card);
     source.splice(index, 1);
 
-    applySpecial(card);
+    const result = applySpecial(card);
     refill(player);
 
-    nextTurn();
+    if (result !== "play_again") {
+        nextTurn();
+    }
+
     render();
     runTurn();
 }
@@ -218,7 +262,7 @@ function botPlay(player) {
     if (index === -1) {
         pickupPile(player);
         refill(player);
-        return;
+        return "next";
     }
 
     const card = source[index];
@@ -226,8 +270,10 @@ function botPlay(player) {
     tablePile.push(card);
     source.splice(index, 1);
 
-    applySpecial(card);
+    const result = applySpecial(card);
     refill(player);
+
+    return result;
 }
 
 // =====================
@@ -243,9 +289,11 @@ function runTurn() {
     gameLocked = true;
 
     setTimeout(() => {
-        botPlay(player);
+        const result = botPlay(player);
 
-        nextTurn();
+        if (result !== "play_again") {
+            nextTurn();
+        }
 
         gameLocked = false;
 
@@ -255,7 +303,7 @@ function runTurn() {
 }
 
 // =====================
-// RENDER (SAFE)
+// RENDER
 // =====================
 function render() {
     const me = players[0];
@@ -275,13 +323,13 @@ function render() {
         ).join('');
 
     faceUpEl.innerHTML =
-        (me.faceUp || []).map(c =>
-            `<img class="card small" src="${getCardImage(c)}">`
+        (me.faceUp || []).map((c, i) =>
+            `<img class="card small" src="${getCardImage(c)}" onclick="window.playCard(${i})">`
         ).join('');
 
     faceDownEl.innerHTML =
-        (me.faceDown || []).map(() =>
-            `<img class="card small" src="${getCardImage(null, true)}">`
+        (me.faceDown || []).map((_, i) =>
+            `<img class="card small" src="${getCardImage(null, true)}" onclick="window.playCard(${i})">`
         ).join('');
 
     tableEl.innerHTML =
@@ -319,6 +367,22 @@ function render() {
 }
 
 // =====================
-// START
+// MODE BUTTONS
+// =====================
+document.querySelectorAll('.mode-select button[data-mode]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        startGame(Number(btn.dataset.mode));
+    });
+});
+
+// =====================
+// SHUFFLE BUTTON (FIXED)
+// =====================
+document.getElementById('shuffle-btn').addEventListener('click', () => {
+    startGame(gameMode); // 🔥 keeps selected mode
+});
+
+// =====================
+// START DEFAULT
 // =====================
 startGame(1);

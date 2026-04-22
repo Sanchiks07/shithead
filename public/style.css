@@ -319,7 +319,6 @@ body::before {
     padding: 20px;
     min-height: 100vh;
 }
-
 /* ===================== */
 /* CARDS */
 /* ===================== */
@@ -420,4 +419,66 @@ body::before {
 /* ===================== */
 h4 {
     margin: 5px 0;
+}
+
+
+
+.leaderboard-container {
+    min-height: 100vh;
+    padding: 30px;
+    color: white;
+    text-align: center;
+}
+
+.title {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+.my-rank-box {
+    background: rgba(255,255,255,0.08);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.table-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.leaderboard-table {
+    width: 80%;
+    border-collapse: collapse;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.leaderboard-table th {
+    background: rgba(255, 204, 0, 0.2);
+    color: #ffcc00;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 18px;
+    background: #ffcc00;
+    color: black;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
 }
