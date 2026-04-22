@@ -31,8 +31,10 @@
             </table>
         </div>
 
-        <a href="/" class="back-btn" style="margin-right: 20px;">Back to Home</a>
-        <a href="/game" class="back-btn">Back to Game</a>
+        <div class="leaderboard-btns">
+            <a href="{{ route('home') }}" class="back-btn">Back to Home</a>
+            <a href="{{ route('game') }}" class="back-btn">Back to Game</a>
+        </div>
 
     </div>
 

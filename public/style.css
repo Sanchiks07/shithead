@@ -32,6 +32,7 @@ body {
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255,255,255,0.1);
     box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    position: relative;
 }
 
 .nav-left, .nav-right {
@@ -78,6 +79,15 @@ body {
 .logout-form button:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(255, 204, 0, 0.7);
+}
+
+.nav-toggle {
+    display: none;
+    font-size: 26px;
+    background: none;
+    border: none;
+    color: #f5f5f5;
+    cursor: pointer;
 }
 
 /* ---------- LOGIN & REGISTER ---------- */
@@ -564,6 +574,8 @@ body::before {
     border-radius: 10px;
     margin-bottom: 20px;
     display: inline-block;
+    width: 50%;
+    max-width: 400px;
 }
 
 .table-wrapper {
@@ -589,9 +601,16 @@ body::before {
     color: #ffcc00;
 }
 
+.leaderboard-btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    margin-top: 25px;
+}
+
 .back-btn {
     display: inline-block;
-    margin-top: 25px;
     padding: 10px 18px;
     font-weight: bold;
     text-decoration: none;
@@ -605,4 +624,212 @@ body::before {
 .back-btn:hover {
     transform: translateY(-3px) scale(1.05);
     box-shadow: 0 10px 25px rgba(255, 204, 0, 0.5);
+}
+
+/* ---------- RESPONSIVE DESIGN ---------- */
+@media (max-width: 768px) {
+    /* navigation */
+    .nav-toggle {
+        display: block;
+    }
+
+    .nav-right {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 15px 20px;
+        background: linear-gradient(135deg, #1f3d2b, #0d1f17);
+        border-bottom: 1px solid rgba(255, 204, 0, 0.15);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        display: none;
+    }
+
+    .nav-right.active {
+        display: flex;
+    }
+
+    .logout-form button {
+        width: 100%;
+    }
+
+    .nav-left {
+        gap: 15px;
+    }
+
+    /* login & register */
+    .auth-container {
+        padding: 20px 15px;
+        gap: 15px;
+    }
+
+    .auth-container h1 {
+        font-size: 30px;
+        text-align: center;
+    }
+
+    .auth-container form {
+        width: 100%;
+        max-width: 360px;
+        padding: 20px;
+        gap: 0;
+    }
+
+    .auth-container input {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .auth-container button {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .default-users {
+        width: 100%;
+        max-width: 360px;
+        padding: 15px;
+    }
+
+    .error-messages {
+        width: 100%;
+        max-width: 360px;
+    }
+
+    /* home page */
+    .home-container {
+        padding: 25px 15px;
+    }
+
+    .home-container h1 {
+        font-size: 38px;
+        letter-spacing: 2px;
+        text-align: center;
+    }
+
+    .intro {
+        font-size: 16px;
+        margin-bottom: 25px;
+        padding: 0 10px;
+    }
+
+    .rules {
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+    .rules h2 {
+        font-size: 22px;
+    }
+
+    .rules p, .rules li {
+        font-size: 14px;
+    }
+
+    .play-btn {
+        font-size: 16px;
+        padding: 12px 28px;
+    }
+
+    /* leaderboard */
+    .leaderboard-container {
+        padding: 20px 12px;
+    }
+
+    .leaderboard-container h1 {
+        font-size: 28px;
+        letter-spacing: 2px;
+    }
+
+    .leaderboard-container h1 .emoji {
+        font-size: 28px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    .my-rank-box {
+        width: 60%;
+        max-width: 320px;
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .leaderboard-table th, .leaderboard-table td {
+        padding: 8px;
+    }
+
+    .back-btn {
+        width: 100%;
+        max-width: 260px;
+        text-align: center;
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+
+    /* game page */
+    #game {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "title"
+            "controls"
+            "deck"
+            "pile"
+            "opponents"
+            "faceup"
+            "facedown"
+            "hand";
+
+        gap: 12px;
+        padding: 12px;
+    }
+
+    #game h1 {
+        font-size: 28px;
+        letter-spacing: 2px;
+    }
+
+    .mode-select {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .mode-select button {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    #opponents {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .opponent {
+        padding: 8px;
+    }
+
+    .card {
+        width: 52px;
+    }
+
+    .card.small {
+        width: 36px;
+    }
+
+    #deck img {
+        width: 60px;
+    }
+
+    .pile-card {
+        width: 70px;
+    }
+
+    #player-hand {
+        gap: 6px;
+    }
 }
