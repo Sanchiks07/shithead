@@ -24,8 +24,8 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 // GAME
 Route::get('/game', [GameController::class, 'index'])->name('game')->middleware('auth');
 
+// SCORE
 Route::middleware('auth')->group(function () {
-
     // PAGE
     Route::middleware('auth')->get('/leaderboard', function () {
         return view('leaderboard');

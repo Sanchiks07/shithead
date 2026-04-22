@@ -57,6 +57,47 @@ function createPlayer(isHuman = false) {
 }
 
 // =====================
+// 🧠 WIN CHECK (ADDED)
+// =====================
+function checkWin(player) {
+    return (
+        player.hand.length === 0 &&
+        player.faceUp.length === 0 &&
+        player.faceDown.length === 0
+    );
+}
+
+// =====================
+// 🏆 HANDLE WIN (ADDED)
+// =====================
+async function handleWin(winner) {
+    gameLocked = true;
+
+    const isHuman = winner.isHuman;
+
+    // 🔊 ANNOUNCE
+    const gameEl = document.getElementById('game');
+
+    const msg = document.createElement('div');
+    msg.className = 'win-message';
+    msg.innerHTML = isHuman ? '🎉 You Win!' : '💀 You Lose!';
+    gameEl.appendChild(msg);
+
+    // 💾 SAVE TO BACKEND
+    try {
+        await fetch(isHuman ? '/score/win' : '/score/loss', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json'
+            }
+        });
+    } catch (err) {
+        console.error('Score save failed:', err);
+    }
+}
+
+// =====================
 // START GAME (FIXED)
 // =====================
 function startGame(mode = 1) {
@@ -64,6 +105,10 @@ function startGame(mode = 1) {
 
     deck = new Cards.Deck();
     deck.shuffle();
+
+    // 🔥 RESET PILE
+    tablePile = [];
+    pileValue = 0;
 
     players = [];
     const count = mode === 1 ? 2 : 3;
@@ -218,6 +263,13 @@ function playCard(index) {
             if (result !== "play_again") nextTurn();
         }
 
+        // 🧠 WIN CHECK (ADDED)
+        if (checkWin(player)) {
+            handleWin(player);
+            render();
+            return;
+        }
+
         render();
         runTurn();
         return;
@@ -229,6 +281,7 @@ function playCard(index) {
         refill(player);
 
         nextTurn();
+
         render();
         runTurn();
         return;
@@ -243,6 +296,13 @@ function playCard(index) {
 
     if (result !== "play_again") {
         nextTurn();
+    }
+
+    // 🧠 WIN CHECK (ADDED)
+    if (checkWin(player)) {
+        handleWin(player);
+        render();
+        return;
     }
 
     render();
@@ -290,6 +350,13 @@ function runTurn() {
 
     setTimeout(() => {
         const result = botPlay(player);
+
+        // 🧠 WIN CHECK (ADDED)
+        if (checkWin(player)) {
+            handleWin(player);
+            render();
+            return;
+        }
 
         if (result !== "play_again") {
             nextTurn();
@@ -345,18 +412,21 @@ function render() {
             <div class="opponent">
                 <h4>Player ${i + 2}</h4>
 
+                <h5>Their Hand</h5>
                 <div class="row">
                     ${(p.hand || []).map(() =>
                         `<img class="card small" src="/images/card-back.png">`
                     ).join('')}
                 </div>
 
+                <h5>Face Up</h5>
                 <div class="row">
                     ${(p.faceUp || []).map(c =>
                         `<img class="card small" src="${getCardImage(c)}">`
                     ).join('')}
                 </div>
 
+                <h5>Face Down</h5>
                 <div class="row">
                     ${(p.faceDown || []).map(() =>
                         `<img class="card small" src="/images/card-back.png">`

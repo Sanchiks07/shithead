@@ -1,5 +1,5 @@
 async function loadLeaderboard() {
-    const res = await fetch('/leaderboard');
+    const res = await fetch('/leaderboard-data');
     const data = await res.json();
 
     const body = document.getElementById('leaderboard-body');
