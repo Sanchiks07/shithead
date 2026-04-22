@@ -1,7 +1,10 @@
 <x-layout>
     <div class="leaderboard-container">
 
-        <h1 class="title">🏆 High Score</h1>
+        <h1>
+            <span class="emoji">🏆</span>
+            <span class="text">Leaderboard</span>
+        </h1>
 
         <!-- YOUR PERSONAL RANK -->
         <div id="my-rank" class="my-rank-box">
@@ -28,7 +31,8 @@
             </table>
         </div>
 
-        <a href="/" class="back-btn">Back to Game</a>
+        <a href="/" class="back-btn" style="margin-right: 20px;">Back to Home</a>
+        <a href="/game" class="back-btn">Back to Game</a>
 
     </div>
 

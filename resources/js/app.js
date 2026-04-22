@@ -1,8 +1,6 @@
 import * as Cards from 'deckofcards';
 
-// =====================
 // GAME STATE
-// =====================
 let deck;
 
 let players = [];
@@ -13,12 +11,9 @@ let pileValue = 0;
 
 let gameLocked = false;
 
-// 🔥 FIX: store selected mode (IMPORTANT)
 let gameMode = 1;
 
-// =====================
 // CARD IMAGE
-// =====================
 function getCardImage(card, hidden = false) {
     if (hidden || !card) return `/images/card-back.png`;
 
@@ -44,9 +39,7 @@ function getCardImage(card, hidden = false) {
     return `/images/${suit}/${value}_of_${suit}.png`;
 }
 
-// =====================
 // PLAYER
-// =====================
 function createPlayer(isHuman = false) {
     return {
         hand: [],
@@ -56,9 +49,7 @@ function createPlayer(isHuman = false) {
     };
 }
 
-// =====================
-// 🧠 WIN CHECK (ADDED)
-// =====================
+// WIN CHECK
 function checkWin(player) {
     return (
         player.hand.length === 0 &&
@@ -67,15 +58,13 @@ function checkWin(player) {
     );
 }
 
-// =====================
-// 🏆 HANDLE WIN (ADDED)
-// =====================
+// HANDLE WIN
 async function handleWin(winner) {
     gameLocked = true;
 
     const isHuman = winner.isHuman;
 
-    // 🔊 ANNOUNCE
+    // announce
     const gameEl = document.getElementById('game');
 
     const msg = document.createElement('div');
@@ -83,7 +72,7 @@ async function handleWin(winner) {
     msg.innerHTML = isHuman ? '🎉 You Win!' : '💀 You Lose!';
     gameEl.appendChild(msg);
 
-    // 💾 SAVE TO BACKEND
+    // save to backend
     try {
         await fetch(isHuman ? '/score/win' : '/score/loss', {
             method: 'POST',
@@ -97,16 +86,17 @@ async function handleWin(winner) {
     }
 }
 
-// =====================
-// START GAME (FIXED)
-// =====================
+// START GAME
 function startGame(mode = 1) {
-    gameMode = mode; // 🔥 store mode
+    // remove old win message if it exists
+    document.querySelectorAll('.win-message').forEach(el => el.remove());
+
+    gameMode = mode; // store mode
 
     deck = new Cards.Deck();
     deck.shuffle();
 
-    // 🔥 RESET PILE
+    // reset pile
     tablePile = [];
     pileValue = 0;
 
@@ -124,9 +114,7 @@ function startGame(mode = 1) {
     runTurn();
 }
 
-// =====================
 // DEAL CARDS
-// =====================
 function dealCards() {
     players.forEach(p => {
         for (let i = 0; i < 3; i++) p.hand.push(deck.draw());
@@ -135,9 +123,7 @@ function dealCards() {
     });
 }
 
-// =====================
 // VALUE SYSTEM
-// =====================
 function getValue(card) {
     const map = {
         A: 14,
@@ -150,9 +136,7 @@ function getValue(card) {
     return map[card.rank] || Number(card.rank);
 }
 
-// =====================
 // RULE CHECK
-// =====================
 function canPlay(card) {
     const v = getValue(card);
 
@@ -162,9 +146,7 @@ function canPlay(card) {
     return v >= pileValue;
 }
 
-// =====================
 // SPECIAL RULES
-// =====================
 function applySpecial(card) {
     const v = getValue(card);
 
@@ -197,18 +179,14 @@ function applySpecial(card) {
     return "normal";
 }
 
-// =====================
 // REFILL
-// =====================
 function refill(player) {
     while (player.hand.length < 3 && deck.cards.length > 0) {
         player.hand.push(deck.draw());
     }
 }
 
-// =====================
 // PICK UP PILE
-// =====================
 function pickupPile(player) {
     if (!tablePile.length) return;
 
@@ -217,25 +195,19 @@ function pickupPile(player) {
     pileValue = 0;
 }
 
-// =====================
 // TURN
-// =====================
 function nextTurn() {
     currentPlayer = (currentPlayer + 1) % players.length;
 }
 
-// =====================
 // ACTIVE ZONE
-// =====================
 function getActiveZone(player) {
     if (player.hand.length > 0) return player.hand;
     if (player.faceUp.length > 0) return player.faceUp;
     return player.faceDown;
 }
 
-// =====================
 // HUMAN PLAY
-// =====================
 function playCard(index) {
     if (gameLocked) return;
 
@@ -247,7 +219,7 @@ function playCard(index) {
 
     if (!card) return;
 
-    // FACE DOWN
+    // face down
     if (source === player.faceDown) {
         card = source.splice(index, 1)[0];
         tablePile.push(card);
@@ -263,7 +235,7 @@ function playCard(index) {
             if (result !== "play_again") nextTurn();
         }
 
-        // 🧠 WIN CHECK (ADDED)
+        // win check after face down play
         if (checkWin(player)) {
             handleWin(player);
             render();
@@ -275,7 +247,7 @@ function playCard(index) {
         return;
     }
 
-    // INVALID
+    // invalid
     if (!canPlay(card)) {
         pickupPile(player);
         refill(player);
@@ -287,7 +259,7 @@ function playCard(index) {
         return;
     }
 
-    // VALID
+    // valid
     tablePile.push(card);
     source.splice(index, 1);
 
@@ -298,7 +270,7 @@ function playCard(index) {
         nextTurn();
     }
 
-    // 🧠 WIN CHECK (ADDED)
+    // win check after normal play
     if (checkWin(player)) {
         handleWin(player);
         render();
@@ -311,9 +283,7 @@ function playCard(index) {
 
 window.playCard = playCard;
 
-// =====================
 // BOT PLAY
-// =====================
 function botPlay(player) {
     const source = getActiveZone(player);
 
@@ -336,9 +306,7 @@ function botPlay(player) {
     return result;
 }
 
-// =====================
 // TURN ENGINE
-// =====================
 function runTurn() {
     const player = players[currentPlayer];
 
@@ -351,7 +319,7 @@ function runTurn() {
     setTimeout(() => {
         const result = botPlay(player);
 
-        // 🧠 WIN CHECK (ADDED)
+        // win check after bot play
         if (checkWin(player)) {
             handleWin(player);
             render();
@@ -369,9 +337,7 @@ function runTurn() {
     }, 700);
 }
 
-// =====================
 // RENDER
-// =====================
 function render() {
     const me = players[0];
 
@@ -390,14 +356,24 @@ function render() {
         ).join('');
 
     faceUpEl.innerHTML =
-        (me.faceUp || []).map((c, i) =>
-            `<img class="card small" src="${getCardImage(c)}" onclick="window.playCard(${i})">`
-        ).join('');
+        (me.faceUp || []).map((c, i) => {
+            const disabled = me.hand.length > 0;
+
+            return `<img class="card small ${disabled ? 'disabled' : ''}" 
+                src="${getCardImage(c)}" 
+                ${disabled ? '' : `onclick="window.playCard(${i})"`}>
+            `;
+        }).join('');
 
     faceDownEl.innerHTML =
-        (me.faceDown || []).map((_, i) =>
-            `<img class="card small" src="${getCardImage(null, true)}" onclick="window.playCard(${i})">`
-        ).join('');
+        (me.faceDown || []).map((_, i) => {
+            const disabled = me.hand.length > 0 || me.faceUp.length > 0;
+
+            return `<img class="card small ${disabled ? 'disabled' : ''}" 
+                src="${getCardImage(null, true)}" 
+                ${disabled ? '' : `onclick="window.playCard(${i})"`}>
+            `;
+        }).join('');
 
     tableEl.innerHTML =
         tablePile.length
@@ -436,23 +412,17 @@ function render() {
         `).join('');
 }
 
-// =====================
 // MODE BUTTONS
-// =====================
 document.querySelectorAll('.mode-select button[data-mode]').forEach(btn => {
     btn.addEventListener('click', () => {
         startGame(Number(btn.dataset.mode));
     });
 });
 
-// =====================
-// SHUFFLE BUTTON (FIXED)
-// =====================
+// SHUFFLE BUTTON
 document.getElementById('shuffle-btn').addEventListener('click', () => {
-    startGame(gameMode); // 🔥 keeps selected mode
+    startGame(gameMode); // keeps selected mode
 });
 
-// =====================
 // START DEFAULT
-// =====================
 startGame(1);

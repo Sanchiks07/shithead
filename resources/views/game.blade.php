@@ -1,7 +1,6 @@
 <x-layout>
     <div id="game">
-
-        <h1 class="title">Shithead</h1>
+        <h1>Shithead</h1>
 
         <!-- MODE -->
         <div class="mode-select">
@@ -12,11 +11,8 @@
 
         <!-- TOP AREA -->
         <div class="top-row">
-
-            <div id="deck" class="deck"></div>
-
+            <div id="deck" class="deck" style="margin-bottom: 20px;"></div>
             <div id="table" class="pile"></div>
-
         </div>
 
         <!-- OPPONENTS -->
@@ -24,9 +20,8 @@
 
         <!-- PLAYER ZONE -->
         <div class="player-zone">
-
             <div class="section">
-                <h3>Your Hand</h3>
+                <h3 style="margin-top: 0;">Your Hand</h3>
                 <div id="player-hand" class="hand"></div>
             </div>
 
@@ -39,7 +34,6 @@
                 <h3>Face Down</h3>
                 <div id="face-down" class="row"></div>
             </div>
-
         </div>
     </div>
 

@@ -273,7 +273,7 @@ body {
     color: #ffcc00;
 }
 
-.play-button {
+.play-btn {
     padding: 14px 35px;
     font-size: 18px;
     font-weight: bold;
@@ -285,7 +285,7 @@ body {
     box-shadow: 0 5px 20px rgba(255, 204, 0, 0.4);
 }
 
-.play-button:hover {
+.play-btn:hover {
     transform: translateY(-3px) scale(1.05);
     box-shadow: 0 10px 30px rgba(255, 204, 0, 0.6);
 }
@@ -308,18 +308,99 @@ body::before {
 #game {
     display: grid;
     grid-template-areas:
+        "title title title"
+        "controls controls controls"
         "deck pile opponents"
         "faceup pile opponents"
         "facedown pile opponents"
         "hand hand hand";
 
     grid-template-columns: 160px 1fr 1fr;
+    grid-template-rows: auto auto auto auto auto auto;
     gap: 18px;
-
     padding: 20px;
     min-height: 100vh;
+    height: auto;
 }
 
+#game h1 {
+    grid-area: title;
+    justify-self: center;
+    align-self: center;
+    text-align: center;
+    font-size: 42px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, #ffffff, #ffcc00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+
+/*mode buttons */
+.mode-select {
+    grid-area: controls;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.mode-select button {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: #f5f5f5;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.mode-select button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, rgba(255,204,0,0.15), transparent);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.mode-select button:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 204, 0, 0.5);
+    box-shadow: 0 10px 30px rgba(255, 204, 0, 0.15);
+}
+
+.mode-select button:hover::before {
+    opacity: 1;
+}
+
+.mode-select button:active {
+    transform: translateY(0px) scale(0.98);
+}
+
+.mode-select button#shuffle-btn {
+    background: linear-gradient(45deg, #ffcc00, #ffd633);
+    color: #000;
+    font-weight: 700;
+    border: none;
+    box-shadow: 0 6px 25px rgba(255, 204, 0, 0.25);
+}
+
+.mode-select button#shuffle-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 12px 35px rgba(255, 204, 0, 0.35);
+}
+
+/* cards */
 .card {
     width: 70px;
     border-radius: 6px;
@@ -334,6 +415,7 @@ body::before {
     width: 45px;
 }
 
+/* top zones */
 #deck {
     grid-area: deck;
     display: flex;
@@ -358,29 +440,55 @@ body::before {
     box-shadow: 0 10px 25px rgba(0,0,0,0.6);
 }
 
+/* opponents */
 #opponents {
     grid-area: opponents;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    overflow: hidden;
 }
 
 .opponent {
     background: rgba(255,255,255,0.05);
     padding: 10px;
     border-radius: 10px;
+    max-width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
-/* your zone */
+
+.opponent .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* player zone */
+.player-zone {
+    margin-right: 20px;
+}
+
+.section h3 {
+    margin: 8px 0;
+}
+
 #face-up {
     grid-area: faceup;
     display: flex;
     gap: 6px;
+    flex-wrap: wrap;
 }
 
 #face-down {
     grid-area: facedown;
     display: flex;
     gap: 6px;
+    flex-wrap: wrap;
 }
 
 #player-hand {
@@ -388,12 +496,21 @@ body::before {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 10px;
+    flex-wrap: wrap;
+    max-width: 100%;
 }
 
 #face-up img, #face-down img {
     opacity: 0.85;
     transform: scale(0.95);
+}
+
+.card.disabled {
+    cursor: not-allowed;
+}
+
+.card:not(.disabled) {
+    cursor: pointer;
 }
 
 .win-message {
@@ -417,9 +534,23 @@ body::before {
     text-align: center;
 }
 
-.title {
-    font-size: 40px;
+.leaderboard-container h1 {
+    font-size: 42px;
     margin-bottom: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.leaderboard-container h1 .emoji {
+    background: none;
+    -webkit-text-fill-color: initial;
+    font-size: 42px;
+}
+
+.leaderboard-container h1 .text {
+    background: linear-gradient(45deg, #ffffff, #ffcc00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
@@ -460,11 +591,18 @@ body::before {
 
 .back-btn {
     display: inline-block;
-    margin-top: 20px;
+    margin-top: 25px;
     padding: 10px 18px;
-    background: #ffcc00;
-    color: black;
-    text-decoration: none;
-    border-radius: 8px;
     font-weight: bold;
+    text-decoration: none;
+    color: #000;
+    background: linear-gradient(45deg, #ffcc00, #ffd633);
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    box-shadow: 0 5px 15px rgba(255, 204, 0, 0.3);
+}
+
+.back-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(255, 204, 0, 0.5);
 }

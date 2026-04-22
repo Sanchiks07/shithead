@@ -33,6 +33,6 @@
             </p>
         </div>
 
-        <a href="{{ route('game') }}" class="play-button">Play Now</a>
+        <a href="/game" class="play-btn">Play Now</a>
     </div>
 </x-layout>
